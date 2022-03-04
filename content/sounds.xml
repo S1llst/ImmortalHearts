@@ -1,0 +1,8 @@
+<sounds root="sfx/">
+	<sound name="ImmortalHeartBreak">
+		<sample weight="1" path="ImmortalHeart_Break.wav" />
+	</sound>
+	<sound name="immortal">
+		<sample weight="1" path="immortal.wav" />
+	</sound>
+</sounds>

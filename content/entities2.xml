@@ -1,0 +1,12 @@
+<entities anm2root="gfx/" version="5">
+	<entity anm2path="005.019_heart (immortal).anm2" baseHP="0" boss="0" collisionDamage="0" collisionMass="3" collisionRadius="12" friction="1" id="5" name="Immortal Heart" numGridCollisionPoints="24" shadowSize="17" stageHP="0" variant="10" subtype="902">
+		<gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" />
+	</entity>
+	<entity anm2path="1000.049_immortalheart.anm2" baseHP="0" boss="0" collisionDamage="0" collisionMass="0" collisionRadius="0" friction="0" id="1000" name="Immortal Heart Charge" numGridCollisionPoints="0" shadowSize="0" stageHP="0" variant="903">
+		<gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" />
+	</entity>
+    <entity anm2path="003.238_immortal baby.anm2" baseHP="18" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="13" friction="1" id="3" name="Immortal Baby" numGridCollisionPoints="12" shadowSize="10" stageHP="0" tags="cansacrifice" variant="238" subtype="20"/>
+	<entity anm2path="HeartBroken.anm2" baseHP="0" boss="0" collisionDamage="0" collisionMass="0" collisionRadius="0" friction="0" id="1000" name="Immortal Heart Break" numGridCollisionPoints="0" shadowSize="0" stageHP="0" variant="904">
+		<gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" />
+	</entity>
+</entities>
