@@ -2,7 +2,7 @@ ComplianceImmortal = RegisterMod("Compliance Immortal Hearts", 1)
 local mod = ComplianceImmortal
 local game = Game()
 local json = require("json") 
-local IHDesc =  "{{ImmortalHeartIcon}} Holy heart that regenerates upon completing a room in which the player received damage#{{ImmortalHeartIcon}} The player may only have 1 Immortal Heart at a time#{{ImmortalHeartIcon}} Invinsibility time after taking damage is reduced"
+local IHDesc =  "{{ImmortalHeartIcon}} Holy heart that regenerates upon completing a room in which the player received damage#{{ImmortalHeartIcon}} The player may only have 1 Immortal Heart at a time#{{ImmortalHeartIcon}} Invincibility frames are reduced"
 local IHDescSpa = "{{ImmortalHeartIcon}} Corazón especial que se regenera al completar una sala si es que recibió daño#{{ImmortalHeartIcon}} Sólo puedes tener uno a la vez#{{ImmortalHeartIcon}} El tiempo de invencibilidad al recibir daño se reduce"
 local IHDescRu = "{{ImmortalHeartIcon}} Святое сердце, которое восстанавливается после зачистки комнаты, в которой игрок получил урон#{{ImmortalHeartIcon}} У игрока может быть только 1 бессмертное сердце за раз#{{ImmortalHeartIcon}} Время неуязвимости после урона уменьшено"
 
