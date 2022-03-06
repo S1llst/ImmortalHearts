@@ -94,7 +94,7 @@ function mod:FullSoulHeartInit(pickup)
 		end
 	end
 end
-mod:AddCallback(ModCallbacks.MC_POST_PICKUP_INIT, mod.FullSoulHeartInit, PickupVariant.PICKUP_HEART)
+mod:AddCallback(ModCallbacks.MC_POST_PICKUP_UPDATE, mod.FullSoulHeartInit, PickupVariant.PICKUP_HEART)
 
 function mod:shouldDeHook()
 	local reqs = {
