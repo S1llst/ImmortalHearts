@@ -83,8 +83,8 @@ function mod:OnLoad(isLoading)
 				end
 			end
 		end
-		mod.optionNum = load.SpriteStyle
-		mod.optionChance = load.AppearanceChance
+		mod.optionNum = load.SpriteStyle and load.SpriteStyle or 1
+		mod.optionChance = load.AppearanceChance and load.AppearanceChance  or 20
 	end
 end
 
