@@ -169,7 +169,10 @@ local function renderingHearts(player,playeroffset)
 			spritename,glowname = spritename.."_flashy",glowname.."_flashy"
 		end
 		if mod.optionNum == 7 then
-			spritename,gloqname = spritename.."_bettericons",glowname.."_betterions"
+			spritename,glowname = spritename.."_bettericons",glowname.."_betterions"
+		end
+		if mod.optionNum == 8 then
+			spritename,glownamw = spritename.."_eternalupdate",glowname.."eternalupdate"
 		end
 		spritename, glowname = spritename..".png", glowname..".png"
 		ImmortalSplash:ReplaceSpritesheet(0,spritename)
