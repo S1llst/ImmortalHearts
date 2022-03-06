@@ -9,6 +9,7 @@ mod.optionChance = 20
 		[3] = "Lifebar",
 		[4] = "Beautiful",
 		[5] = "Goncholito",
+		[6] = "Flashy", 
     }
 
 if ModConfigMenu then
@@ -25,7 +26,7 @@ if ModConfigMenu then
             return mod.optionNum
         end,
         Minimum = 1,
-        Maximum = 5,
+        Maximum = 6,
         Display = function()
             return 'Use sprites: ' .. Options[mod.optionNum]
         end,
