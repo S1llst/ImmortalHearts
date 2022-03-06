@@ -165,6 +165,12 @@ local function renderingHearts(player,playeroffset)
 		if mod.optionNum == 5 then 
 			spritename,glowname = spritename.."_goncholito",glowname.."_goncholito"
 		end
+		if mod.optionNum == 6 then
+			spritename,glowname = spritename.."_flashy",glowname.."_flashy"
+		end
+		if mod.optionNum == 7 then
+			spritename,gloqname = spritename.."_bettericons",glowname.."_betterions"
+		end
 		spritename, glowname = spritename..".png", glowname..".png"
 		ImmortalSplash:ReplaceSpritesheet(0,spritename)
 		ImmortalSplash:ReplaceSpritesheet(1,glowname)
@@ -338,6 +344,12 @@ function mod:SpriteChange(entity)
 		end
 		if mod.optionNum == 3 then
 			spritename = spritename.."_peas"
+		end
+		if mod.optionNum == 6 then
+			spritename = spritename.."_flashy"
+		end
+		if mod.optionNum == 7 then
+			spritename = spritename.."_bettericons"
 		end
 		spritename = spritename..".png"
 		for i = 0,2 do
