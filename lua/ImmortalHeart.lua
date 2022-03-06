@@ -223,6 +223,7 @@ mod:AddCallback(ModCallbacks.MC_GET_SHADER_PARAMS, mod.onRender)
 function mod:ImmortalBlock(entity, amount, flag, source, cooldown)
 	local player = entity:ToPlayer()
 	local data = mod:GetData(player)
+	player = player:GetPlayerType() == PlayerType.PLAYER_THEFORGOTTEN_B and player:GetOtherTwin() or player
 	if data.ComplianceImmortalHeart > 0 and flag & DamageFlag.DAMAGE_FAKE == 0 and not (( 
 	flag & DamageFlag.DAMAGE_RED_HEARTS == DamageFlag.DAMAGE_RED_HEARTS or player:HasTrinket(TrinketType.TRINKET_CROW_HEART)) and player:GetHearts() > 0) and
 	not (player:GetEffects():HasCollectibleEffect(NullItemID.ID_HOLY_CARD) or player:GetEffects():HasCollectibleEffect(CollectibleType.COLLECTIBLE_HOLY_MANTLE)) 
@@ -241,6 +242,11 @@ function mod:ImmortalBlock(entity, amount, flag, source, cooldown)
 		if data.ComplianceImmortalHeart > 0 then
 			player:ResetDamageCooldown()
 			player:SetMinDamageCooldown(20)
+			if player:GetPlayerType() == PlayerType.PLAYER_THESOUL_B or player:GetPlayerType() == PlayerType.PLAYER_ESAU
+			or player:GetPlayerType() == PlayerType.PLAYER_JACOB then
+				player:GetOtherTwin():ResetDamageCooldown()
+				player:GetOtherTwin():SetMinDamageCooldown(20)		
+			end
 		end
 		return false
 	end
