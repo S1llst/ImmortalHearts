@@ -1,10 +1,17 @@
 local Enums = require("tc_lua.core.enums")
 local Globals = require("tc_lua.core.globals")
-local Pickup = require("tc_lua.items.pickups.pickup")
+local PickupHeart = require("tc_lua.items.pickups.hearts.pickup_heart")
 local PickupReplacement = require("tc_lua.items.pickups.pickup_replacement")
 local ScreenHelper = require("tc_lua.helpers.screen_helper")
 
-local ImmortalHeart = Pickup:New(PickupVariant.PICKUP_HEART, Enums.HeartSubType.HEART_IMMORTAL)
+local ImmortalHeart = PickupHeart:New(Enums.HeartSubType.HEART_IMMORTAL)
+
+ImmortalHeart.Stats = {
+    Cooldown = 20
+}
+
+ImmortalHeart.HasUIRender = true
+ImmortalHeart.RenderShaderName = "Immortal Hearts"
 
 -- Local variables
 local immortalBreakSfx = Isaac.GetSoundIdByName("ImmortalHeartBreak")
@@ -12,12 +19,15 @@ local immortalSfx = Isaac.GetSoundIdByName("immortal")
 local ImmortalSplash = Sprite()
 ImmortalSplash:Load("gfx/ui/ui_remix_hearts.anm2",true)
 
+local players = 0
+local isJacobFirst = 0
+
 ImmortalHeart:SetReplacementOptions(
     PickupReplacement:New(PickupVariant.PICKUP_HEART, HeartSubType.HEART_ETERNAL, 20)
 )
 
 function ImmortalHeart:Collect(pickup)
-    Pickup.Collect(self, pickup)
+    PickupHeart.Collect(self, pickup)
     Globals.SFX:Play(immortalSfx,1,0)
 end
 
@@ -67,34 +77,6 @@ function ImmortalHeart:OnPlayerCollision(pickup, player)
     end
 end
 
--- Additional callbacks
-
--- MC_POST_PLAYER_INIT --
-function ImmortalHeart:PlayerInit(player)
-    local pData = player:GetData()
-
-	if pData.TC_immortalHeart_amount == nil then
-		pData.TC_immortalHeart_amount = 0
-		pData.TC_immortalHeart_hpOffset = 0
-	end
-    if player:GetPlayerType() == PlayerType.PLAYER_BETHANY then
-    	pData.TC_immortalHeart_immortalCharge = 0
-	end
-end
-
--- MC_POST_PICKUP_INIT --
-function ImmortalHeart:FullSoulHeartInit(pickup)
-	if pickup.SubType == HeartSubType.HEART_HALF_SOUL then
-		for i = 0, Globals.Game:GetNumPlayers() - 1 do
-            local player = Isaac.GetPlayer(i)
-			local pData = player:GetData()
-			if pData.TC_immortalHeart_amount > 0 then
-                pickup:ToPickup():Morph(pickup.Type,pickup.Variant,HeartSubType.HEART_SOUL,true,true)
-                return
-			end
-		end
-	end
-end
 
 local function CanOnlyHaveSoulHearts(player)
 	if player:GetPlayerType() == PlayerType.PLAYER_BLUEBABY
@@ -106,14 +88,12 @@ local function CanOnlyHaveSoulHearts(player)
 	return false
 end
 
-local function shouldDeHook()
-	local reqs = {
-	  not Globals.Game:GetHUD():IsVisible(),
-	  Globals.Game:GetSeeds():HasSeedEffect(SeedEffect.SEED_NO_HUD)
-	}
-	return reqs[1] or reqs[2]
+function ImmortalHeart:OnPreRender()
+    players = 0
+    isJacobFirst = false
 end
 
+-- TODO : shouldn't be in the Immortal Heart file. Should be in a "helper" file
 local function renderingHearts(player, playeroffset)
     local pData = player:GetData()
 	local isForgotten = player:GetPlayerType() == PlayerType.PLAYER_THEFORGOTTEN and 1 or 0
@@ -172,56 +152,134 @@ local function renderingHearts(player, playeroffset)
 		ImmortalSplash:ReplaceSpritesheet(1,glowname)
 		ImmortalSplash:LoadGraphics()
 		ImmortalSplash.FlipX = playeroffset == 5
-		ImmortalSplash:Render(Vector(offset.X, offset.Y), Vector(0,0), Vector(0,0))
+		ImmortalSplash:Render(Vector(offset.X, offset.Y), Vector(0, 0), Vector(0, 0))
 	end
 end
 
-function TC_ImmortalHeart:OnRender(shadername)
-	if shadername ~= "Immortal Hearts" then return end
+function ImmortalHeart:OnRenderPlayerHeart(i, player)
+    if players < 4 then
+        local pData = player:GetData()
+        if players == 0 and player:GetPlayerType() == PlayerType.PLAYER_JACOB then
+            isJacobFirst = true
+        end
+        if (player:GetPlayerType() == PlayerType.PLAYER_LAZARUS_B or player:GetPlayerType() == PlayerType.PLAYER_LAZARUS2_B) then
+            if player:GetOtherTwin() then
+                if pData.TC_immortalHeart_i and pData.iTC_immortalHeart_i == i then
+                    pData.TC_immortalHeart_i = nil
+                end
+                if not pData.TC_immortalHeart_i then
+                    local otherTData = player:GetOtherTwin():GetData()
+                    otherTData.TC_immortalHeart_i = i
+                end
+            elseif pData.TC_immortalHeart_i then
+                pData.TC_immortalHeart_i = nil
+            end
+        end
+        local playeroffset
+        local isIllusion = pData.IllusionMod and pData.IllusionMod.IsIllusion
+        if  player:GetPlayerType() ~= PlayerType.PLAYER_THESOUL_B and not isIllusion and not pData.TC_immortalHeart_i then
+            if player:GetPlayerType() ~= PlayerType.PLAYER_ESAU then
+                players = players + 1
+                playeroffset = players
+            end
+            if player:GetPlayerType() == PlayerType.PLAYER_ESAU and isJacobFirst then
+                renderingHearts(player,5)
+            elseif player:GetPlayerType() ~= PlayerType.PLAYER_ESAU then
+                renderingHearts(player,playeroffset)
+            end
+        end
+    end
+end
 
-	if shouldDeHook() then return end
-	local players = 0
-	local isJacobFirst = false
-	for i = 0, Globals.Game:GetNumPlayers() - 1 do
-		if players < 4 then
-			local player = Isaac.GetPlayer(i)
+function ImmortalHeart:OnPlayerTakeDamage(player, amount, flag, source, cooldown)
+    local pData = player:GetData()
+    local playerType = player:GetPlayerType()
+
+	player = playerType == PlayerType.PLAYER_THEFORGOTTEN_B and player:GetOtherTwin() or player
+
+    -- TODO : Isn't it possible to clean that terrifying if condition ?
+	if pData.TC_immortalHeart_amount > 0 and flag & DamageFlag.DAMAGE_FAKE == 0 and not (( 
+	flag & DamageFlag.DAMAGE_RED_HEARTS == DamageFlag.DAMAGE_RED_HEARTS or player:HasTrinket(TrinketType.TRINKET_CROW_HEART)) and player:GetHearts() > 0) and
+	not (player:GetEffects():HasCollectibleEffect(NullItemID.ID_HOLY_CARD) or player:GetEffects():HasCollectibleEffect(CollectibleType.COLLECTIBLE_HOLY_MANTLE)) 
+	and (playerType ~= PlayerType.PLAYER_THELOST and playerType ~= PlayerType.PLAYER_THELOST_B
+	and playerType ~= PlayerType.PLAYER_JACOB2_B and playerType ~= PlayerType.PLAYER_THEFORGOTTEN) and
+	not (pData.VoodooPin and pData.VoodooPin.SwapedEnemy) then
+		amount = pData.TC_immortalHeart_amount == 1 and 1 or (amount > 2 and 2 or amount)
+		pData.TC_immortalHeart_amount = pData.TC_immortalHeart_amount - amount
+		if pData.TC_immortalHeart_amount == 0 then
+			Globals.SFX:Play(immortalBreakSfx, 1, 0)
+			local shatterSPR = Isaac.Spawn(EntityType.ENTITY_EFFECT, 904, 0, player.Position + Vector(0, 1), Vector.Zero, nil):ToEffect():GetSprite()
+			shatterSPR.PlaybackSpeed = 2
+		end
+		player:TakeDamage(amount, DamageFlag.DAMAGE_FAKE, source, cooldown)
+		player:AddSoulHearts(-amount)
+		if pData.TC_immortalHeart_amount > 0 then
+			player:ResetDamageCooldown()
+			player:SetMinDamageCooldown(ImmortalHeart.Stats.Cooldown)
+			if playerType == PlayerType.PLAYER_THESOUL_B or playerType == PlayerType.PLAYER_ESAU
+			or player:GetPlayerType() == PlayerType.PLAYER_JACOB then
+				player:GetOtherTwin():ResetDamageCooldown()
+				player:GetOtherTwin():SetMinDamageCooldown(ImmortalHeart.Stats.Cooldown)
+			end
+		end
+		return false
+	end
+end
+
+-- Additional callbacks
+
+-- MC_POST_PLAYER_INIT --
+function ImmortalHeart:PlayerInit(player)
+    local pData = player:GetData()
+
+	if pData.TC_immortalHeart_amount == nil then
+		pData.TC_immortalHeart_amount = 0
+		pData.TC_immortalHeart_hpOffset = 0
+	end
+    if player:GetPlayerType() == PlayerType.PLAYER_BETHANY then
+    	pData.TC_immortalHeart_immortalCharge = 0
+	end
+end
+
+-- MC_POST_PICKUP_INIT --
+function ImmortalHeart:FullSoulHeartInit(pickup)
+	if pickup.SubType == HeartSubType.HEART_HALF_SOUL then
+		for i = 0, Globals.Game:GetNumPlayers() - 1 do
+            local player = Isaac.GetPlayer(i)
 			local pData = player:GetData()
-			if players == 0 and player:GetPlayerType() == PlayerType.PLAYER_JACOB then
-				isJacobFirst = true
-			end
-			if (player:GetPlayerType() == PlayerType.PLAYER_LAZARUS_B or player:GetPlayerType() == PlayerType.PLAYER_LAZARUS2_B) then
-				if player:GetOtherTwin() then
-					if pData.TC_immortalHeart_i and pData.iTC_immortalHeart_i == i then
-						pData.TC_immortalHeart_i = nil
-					end
-					if not pData.TC_immortalHeart_i then
-						local otherTData = player:GetOtherTwin():GetData()
-						otherTData.TC_immortalHeart_i = i
-					end
-				elseif pData.TC_immortalHeart_i then
-					pData.TC_immortalHeart_i = nil
-				end
-			end
-			local playeroffset
-			local isIllusion = pData.IllusionMod and pData.IllusionMod.IsIllusion
-			if  player:GetPlayerType() ~= PlayerType.PLAYER_THESOUL_B and not isIllusion and not pData.TC_immortalHeart_i then
-				if player:GetPlayerType() ~= PlayerType.PLAYER_ESAU then
-					players = players + 1
-					playeroffset = players
-				end
-				if player:GetPlayerType() == PlayerType.PLAYER_ESAU and isJacobFirst then
-					renderingHearts(player,5)
-				elseif player:GetPlayerType() ~= PlayerType.PLAYER_ESAU then
-					renderingHearts(player,playeroffset)
-				end
+			if pData.TC_immortalHeart_amount > 0 then
+                pickup:ToPickup():Morph(pickup.Type,pickup.Variant,HeartSubType.HEART_SOUL,true,true)
+                return
 			end
 		end
 	end
 end
 
+-- MC_PRE_SPAWN_CLEAN_AWARD --
+function ImmortalHeart:CleanRoom()
+	for i = 0, Globals.Game:GetNumPlayers() - 1 do
+		local player = Isaac.GetPlayer(i)
+		local pData = player:GetData()
+		if pData.TC_immortalHeart_amount == 1 then
+			ImmortalEffect = Isaac.Spawn(EntityType.ENTITY_EFFECT, 903, 0, player.Position + Vector(0, 1), Vector.Zero, nil):ToEffect()
+			ImmortalEffect:GetSprite().Offset = Vector(0, -22)
+			Globals.SFX:Play(SoundEffect.SOUND_HOLY, 1, 0, false, 1.25)
+			pData.TC_immortalHeart_amount = 2
+			player:AddSoulHearts(1)
+		end
+	end
+	
+    -- TODO : Wisps ? And get rid of hardcoded values, like what is this 206 ?
+    --[[for _, entity in ipairs(Isaac.FindByType(3, 206)) do
+		local wispdata = entity:GetData()
+		if wispdata.IsImmortal == 1 and entity.HitPoints < entity.MaxHitPoints + 3 then
+			entity.HitPoints = entity.HitPoints + 1
+		end
+	end--]]
+end
+
 TC_ImmortalHeart:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, ImmortalHeart.PlayerInit)
 TC_ImmortalHeart:AddCallback(ModCallbacks.MC_POST_PICKUP_INIT, ImmortalHeart.FullSoulHeartInit, PickupVariant.PICKUP_HEART)
-TC_ImmortalHeart:AddCallback(ModCallbacks.MC_POST_PICKUP_INIT, ImmortalHeart.FullSoulHeartInit, PickupVariant.PICKUP_HEART)
-TC_ImmortalHeart:AddCallback(ModCallbacks.MC_GET_SHADER_PARAMS, TC_ImmortalHeart.OnRender)
+TC_ImmortalHeart:AddCallback(ModCallbacks.MC_PRE_SPAWN_CLEAN_AWARD, ImmortalHeart.CleanRoom)
 
 return ImmortalHeart

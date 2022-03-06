@@ -14,7 +14,9 @@ function Pickup:New(variant, subtype)
     t.Variant = variant or 0
     t.SubType = subtype or 0
 
-    PickupManager:RegisterPickup(t)
+    if subtype > 0 then -- Do not register "abstract" pickups
+        PickupManager:RegisterPickup(t)
+    end
     return t
 end
 
@@ -48,6 +50,7 @@ function Pickup:PickupInit(pickup)
 end
 
 function Pickup:PickupUpdate(pickup)
+    Pickup:OnUpdate(pickup)
 end
 
 function Pickup:PrePickupCollision(pickup, collider)
@@ -70,7 +73,6 @@ function Pickup:OnUpdate(pickup)
 end
 
 function Pickup:OnPlayerCollision(pickup, player)
-    
 end
 
 function Pickup:IsPickable(pickup, player)

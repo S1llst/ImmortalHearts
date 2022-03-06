@@ -39,4 +39,8 @@ function PickupManager:TryGetPickupReplacements(variant, subtype)
     return true, replacementPickups[variant][subtype]
 end
 
+function PickupManager:GetPickups(variant)
+    return registeredPickups[variant] or { }
+end
+
 return PickupManager
