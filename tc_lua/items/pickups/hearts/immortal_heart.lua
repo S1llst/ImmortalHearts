@@ -1,5 +1,6 @@
 local Enums = require("tc_lua.core.enums")
 local Globals = require("tc_lua.core.globals")
+local Config = require("tc_lua.mod_compat.mcm.config")
 local PickupHeart = require("tc_lua.items.pickups.hearts.pickup_heart")
 local PickupReplacement = require("tc_lua.items.pickups.pickup_replacement")
 local ScreenHelper = require("tc_lua.helpers.screen_helper")
@@ -77,7 +78,7 @@ function ImmortalHeart:OnPlayerCollision(pickup, player)
     end
 end
 
-
+-- TODO : Could be in a helper file, that's not specific to Immortal Heart
 local function CanOnlyHaveSoulHearts(player)
 	if player:GetPlayerType() == PlayerType.PLAYER_BLUEBABY
 	or player:GetPlayerType() == PlayerType.PLAYER_BLUEBABY_B or player:GetPlayerType() == PlayerType.PLAYER_BLACKJUDAS
@@ -93,7 +94,8 @@ function ImmortalHeart:OnPreRender()
     isJacobFirst = false
 end
 
--- TODO : shouldn't be in the Immortal Heart file. Should be in a "helper" file
+-- TODO : shouldn't be in the Immortal Heart file as it is not only specific to Immortal heart, but it might be common to several heart pickups.
+-- Though this will require refacto.
 local function renderingHearts(player, playeroffset)
     local pData = player:GetData()
 	local isForgotten = player:GetPlayerType() == PlayerType.PLAYER_THEFORGOTTEN and 1 or 0
@@ -135,18 +137,19 @@ local function renderingHearts(player, playeroffset)
 
 		ImmortalSplash:Play(anim, true)
 		local spritename,glowname = "gfx/ui/ui_remix_hearts","gfx/ui/ui_heart_glow"
-		--[[if mod.optionNum == 2 then
+		if Config.AltGFX == 2 then
 			spritename,glowname = spritename.."_aladar",glowname.."_aladar"
 		end
-		if mod.optionNum == 3 then
+		if Config.AltGFX == 3 then
 			spritename,glowname = spritename.."_peas",glowname.."_peas"
 		end
-		if mod.optionNum == 4 then
+		if Config.AltGFX == 4 then
 			spritename,glowname = spritename.."_beautiful",glowname.."_beautiful"
 		end
-		if mod.optionNum == 5 then 
+		if Config.AltGFX == 5 then 
 			spritename,glowname = spritename.."_goncholito",glowname.."_goncholito"
-		end--]]
+		end
+
 		spritename, glowname = spritename..".png", glowname..".png"
 		ImmortalSplash:ReplaceSpritesheet(0,spritename)
 		ImmortalSplash:ReplaceSpritesheet(1,glowname)

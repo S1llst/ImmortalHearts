@@ -23,7 +23,6 @@ end
 function Pickup:SetReplacementOptions(...)
 	local args = {...}
     for _, replacementOption in ipairs(args) do
-        print(replacementOption.Variant .."."..replacementOption.SubType)
         PickupManager:RegisterPickupReplacement(self, replacementOption)
         table.insert(self.ReplacementOptions, replacementOption)
     end
