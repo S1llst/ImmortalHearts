@@ -1,2 +1,2 @@
-# TeamCompliance-
-Repo of all Team Compliance mods
+# ImmortalHearts-
+Repo of Immortal Hearts
