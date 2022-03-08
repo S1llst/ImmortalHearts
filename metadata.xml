@@ -1,8 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <metadata>
-	<name>!Immortal Hearts: Remix</name>
-	<directory>compliance immortal heart remix</directory>
-	<description/>
-	<version>1.0</version>
-	<visibility/>
-</metadata>
+    <name>Immortal Hearts</name>
+    <directory>compliance immortal heart</directory>
+    <id>2768970216</id>
+    <description>Immortal Hearts are back and better than ever! Bring a new challenge to the health bar, do you have the skill to preserve the heart?
 
+[img]https://i.imgur.com/zx4jgfI.png[/img]
+
+[b][h1]------------------------ 𝐈𝐦𝐦𝐨𝐫𝐭𝐚𝐥 𝐇𝐞𝐚𝐫𝐭𝐬 -----------------------[/h1][/b]
+[img]https://i.imgur.com/lWoyRmL.png[/img]
+[list]
+[*][img]https://i.imgur.com/anZq0RP.png[/img] Holy heart that, if not destroyed in 1 hit, [b]automatically regenerates[/b] upon completing a room in which the player received damage [img]https://i.imgur.com/1s0QtoB.png[/img][list]
+[*]The player may only have [b]1 Immortal Heart[/b] at a time
+[*]Invincibility frames = [b]20[/b]
+[*][u]How to collect:[/u][list]
+[*]Has a [b]20% chance[/b] to replace Eternal Hearts [img]https://i.imgur.com/v91sWU9.png[/img]
+[*][b]Act of Contrition[/b] gives 1 Immortal Heart on pickup [img]https://i.imgur.com/EDzPUN1.png[/img][/list] 
+[/list]
+[list]
+[*][img]https://i.imgur.com/FFDtngB.png[/img] [b]Sumptorium[/b] synergy [img]https://i.imgur.com/FFDtngB.png[/img][list]
+[*]Spawns an [b]Immortal Clot[/b] [img]https://i.imgur.com/0jljwqB.png[/img][list]
+[*]6-18 HP
+[*][b]Heals itself and other Clots[/b] after completing a room [img]https://i.imgur.com/1KrhPgc.png[/img][/list]
+[/list]
+[/list]
+[list]
+[*][img]https://i.imgur.com/9cGRirw.png[/img] [b]Bethany[/b] synergy [img]https://i.imgur.com/9cGRirw.png[/img][list]
+[*]Spawns a [b]unique, white Wisp[/b] after activating Book of Virtues[list]
+[*]Shoots [b]spectral/shielded[/b] tears
+[*][b]Heals itself and other Wisps[/b] after completing a room[/list]
+[/list]
+[/list]
+[/list]
+[b][h1]----------------------- 𝐌𝐨𝐝 𝐂𝐨𝐦𝐩𝐚𝐭𝐢𝐛𝐢𝐥𝐢𝐭𝐲 ----------------------[/h1][/b][list]
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=1978904635]MiniMAPI[/url] [img]https://i.imgur.com/BTBp2dp.png[/img]
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=836319872]External Item Descriptions[/url] (English [img]https://i.imgur.com/11ORCm6.png[/img] Español [img]https://i.imgur.com/BCCFhHE.png[/img] Pусский [img]https://i.imgur.com/vFcOh4w.png[/img])
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2487535818]Mod Config Menu[/url][list]
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2616687713]UI Hearts[/url][img]https://i.imgur.com/LDMFxzk.png[/img]
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2591936266]Lifebar[/url] [img]https://i.imgur.com/3StwT2S.png[/img]
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2545179560]Beautiful Custom HUD[/url] [img]https://i.imgur.com/8XDUAVE.png[/img]
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2758668850]goncholito's hearts[/url] [img]https://i.imgur.com/vh6dEiP.png[/img][/list]
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2678755675]Beth's Heart[/url] [img]https://i.imgur.com/C2aNKdj.png[/img]
+[/list]
+[img]https://i.imgur.com/9Lz5VfQ.png[/img]
+[list]
+[*][u]𝐃𝐢𝐫𝐞𝐜𝐭𝐨𝐫, 𝐆𝐫𝐚𝐩𝐡𝐢𝐜 𝐃𝐞𝐬𝐢𝐠𝐧𝐞𝐫, 𝐒𝐨𝐮𝐧𝐝 𝐃𝐞𝐬𝐢𝐠𝐧𝐞𝐫[/u] = [url=https://steamcommunity.com/profiles/76561198374458982/]Sillst[/url]
+[*][u]𝐂𝐨𝐝𝐞𝐫𝐬[/u] = [url=https://steamcommunity.com/profiles/76561198858875349]Akad[/url], [url=https://steamcommunity.com/id/anchikai]anchikai.[/url], [url=https://steamcommunity.com/id/brakedude]BrakeDude[/url]
+[*][u]𝐀𝐫𝐭𝐢𝐬𝐭𝐬[/u] = [url=https://steamcommunity.com/profiles/76561199054232018]ALADAR[/url], [url=https://steamcommunity.com/id/Mattzilla1919]Firework[/url], [url=https://steamcommunity.com/id/gonxolito]Goncholito[/url], [url=https://steamcommunity.com/profiles/76561198813796283]Kotry[/url], [url=https://steamcommunity.com/profiles/76561199004525526/]Michael¿?[/url], [url=https://steamcommunity.com/id/funnynotename]The Demisemihemidemisemiquaver[/url]
+[*][u]𝐓𝐫𝐚𝐧𝐬𝐥𝐚𝐭𝐨𝐫𝐬[/u] = [url=https://steamcommunity.com/id/brakedude]BrakeDude[/url], [url=https://steamcommunity.com/profiles/76561198813796283]Kotry[/url]
+[*][u]𝐏𝐥𝐚𝐲𝐭𝐞𝐬𝐭𝐞𝐫𝐬[/u]= [url=https://steamcommunity.com/profiles/76561198858875349]Akad[/url],  [url=https://steamcommunity.com/id/brakedude]BrakeDude[/url], [url=https://steamcommunity.com/profiles/76561198813796283]Kotry[/url], [url=https://steamcommunity.com/profiles/76561198374458982/]Sillst[/url], [url=https://steamcommunity.com/id/funnynotename]The Demisemihemidemisemiquaver[/url]
+[/list]
+
+[img]https://i.imgur.com/3en8OyU.png[/img]
+[code]Aether, Akad, ALADAR, anchikai., Blind the Bound Demon, Blixy, BrakeDude, cat,,, Firework, fly_6, Goncholito, jubbalub, KitsuneMedia, kittenchilly, Luigi124, Merlin, Michael¿?, PixelPlz, poody_blue, Royal, Sillst, siraxtas, skippy, Soaring__Sky, The Demisemihemidemisemiquaver[/code]
+
+[img]https://i.imgur.com/SlXbHql.png[/img] [img]https://i.imgur.com/xd2eafr.png[/img]
+[code][u]_Kilburn[/u] - For the original Immortal Heart concept
+[u]AgentCucco[/u] - For AchievementDisplayAPI
+[u]Preyn[/u] - For stylistic inspiration in the image gallery
+[u]All of you[/u] - For checking us out and supporting us :)[/code]
+
+[img]https://i.imgur.com/NRi98lu.png[/img]
+
+[img]https://i.imgur.com/xK4Mor0.png[/img] [url=https://discord.gg/GdVnkV4Gwj]TBOI: Compliance Discord Server[/url] [img]https://i.imgur.com/xK4Mor0.png[/img]
+[img]https://i.imgur.com/69jZFo8.png[/img] [url=https://www.reddit.com/r/TBOICompliance/]TBOI: Compliance Subreddit[/url] [img]https://i.imgur.com/69jZFo8.png[/img]
+[img]https://i.imgur.com/GmVPmG0.png[/img] [url=https://www.youtube.com/channel/UCEdAioGltx_hOsyDW57nvSw/featured]TBOI: Compliance YouTube[/url] [img]https://i.imgur.com/GmVPmG0.png[/img]
+[img]https://i.imgur.com/jBFg02x.png[/img] [url=https://twitter.com/ComplianceMods]TBOI: Compliance Twitter[/url] [img]https://i.imgur.com/jBFg02x.png[/img]
+
+[img]https://i.imgur.com/MTKQKCX.png[/img]</description>
+    <version>1.2</version>
+    <visibility>Public</visibility>
+    <tag id="Lua"/>
+    <tag id="Pickups"/>
+    <tag id="Tweaks"/>
+    <tag id="Graphics"/>
+    <tag id="Sound Effects"/>
+</metadata>
