@@ -17,9 +17,9 @@ EID:setModIndicatorName("Immortal Heart")
 	EID:addEntity(5, 10, 902, "Corazón Inmortal", IHDescSpa, "spa")
 	EID:addEntity(5, 10, 902, "Бессмертное сердце", IHDescRu, "ru")
 	
-	EID:addCollectible(601, "↑ {{Tears}} Lágrimas +0.7#{{EternalHeart}} +1 corazón eterno#{{ImmortalHeartIcon}} +1 corazón inmortal#{{AngelDevilChance}} Permite que aparezcan salas del ángel aunque hayas hecho pactos con el diablo antes", "Acto de Contrición", "spa")
-	EID:addCollectible(601, "↑ {{Tears}} +0.7 Tears up#{{EternalHeart}} +1 Eternal Heart#{{ImmortalHeartIcon}} +1 Immortal Heart#{{AngelDevilChance}} Allows both Devil and Angel deals to be taken#Taking Red Heart damage doesn't reduce Devil/Angel Room chance as much", "Act of contrition", "en_us")
-	EID:addCollectible(601,"↑ {{Tears}} +0.7 к скорострельности#{{EternalHeart}} +1 вечное сердце#{{ImmortalHeartIcon}} +1 бессмертное сердце#{{AngelDevilChance}} Позволяет Ангельским комнатам появляться даже в том случае, если ранее была заключена сделка с Дьяволом#Получение урона красными сердцами не так сильно снижает шанс сделки","Покаяние","ru")
+	EID:addCollectible(601, "↑ {{Tears}} Lágrimas +0.7#{{ImmortalHeartIcon}} +1 corazón inmortal#{{AngelDevilChance}} Permite que aparezcan salas del ángel aunque hayas hecho pactos con el diablo antes", "Acto de Contrición", "spa")
+	EID:addCollectible(601, "↑ {{Tears}} +0.7 Tears up#{{ImmortalHeartIcon}} +1 Immortal Heart#{{AngelDevilChance}} Allows both Devil and Angel deals to be taken#Taking Red Heart damage doesn't reduce Devil/Angel Room chance as much", "Act of contrition", "en_us")
+	EID:addCollectible(601,"↑ {{Tears}} +0.7 к скорострельности#{{ImmortalHeartIcon}} +1 бессмертное сердце#{{AngelDevilChance}} Позволяет Ангельским комнатам появляться даже в том случае, если ранее была заключена сделка с Дьяволом#Получение урона красными сердцами не так сильно снижает шанс сделки","Покаяние","ru")
 end
 
 include("lua/ModConfigMenu.lua")
@@ -27,7 +27,7 @@ include("lua/ImmortalHeart.lua")
 include("lua/ImmortalClot.lua")
 include("lua/achievement_display_api.lua")
 
-if MiniMapiItemsAPI then
+if MinimapAPI then
     local frame = 1
     local ImmortalSprite = Sprite()
     ImmortalSprite:Load("gfx/ui/immortalheart_icon.anm2", true)
@@ -217,6 +217,26 @@ function mod:GetData(entity)
 	end
 	return nil
 end
+
+function mod:DidPlayerCollectibleCountJustChange(player)
+	local data = mod:GetData(player)
+	if data.didCollectibleCountJustChange then
+		return true
+	end
+	return false
+end
+mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, function(_, player)
+	local data = mod:GetData(player)
+	local currentCollectibleCount = player:GetCollectibleCount()
+	if not data.lastCollectibleCount then
+		data.lastCollectibleCount = currentCollectibleCount
+	end
+	data.didCollectibleCountJustChange = false
+	if data.lastCollectibleCount ~= currentCollectibleCount then
+		data.didCollectibleCountJustChange = true
+	end
+	data.lastCollectibleCount = currentCollectibleCount
+end)
 
 --[[mod.entitySpawnData = {}
 mod:AddCallback(ModCallbacks.MC_PRE_ENTITY_SPAWN, function(_, type, variant, subType, position, velocity, spawner, seed)

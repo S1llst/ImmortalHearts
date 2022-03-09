@@ -4,8 +4,6 @@ local sfx = SFXManager()
 local immortalBreakSfx = Isaac.GetSoundIdByName("ImmortalHeartBreak")
 local immortalSfx = Isaac.GetSoundIdByName("immortal")
 local screenHelper = require("lua.screenhelper")
-local ImmortalSplash = Sprite()
-ImmortalSplash:Load("gfx/ui/ui_remix_hearts.anm2",true)
 
 function mod:initData(player)
 	local data = mod:GetData(player)
@@ -52,7 +50,7 @@ function mod:ImmortalHeartUpdate(entity, collider)
 					entity:Die()
 					entity.Velocity = Vector.Zero
 					sfx:Play(immortalSfx,1,0)
-				elseif data.ComplianceImmortalHeart < 2 then
+				else
 					if player:GetPlayerType() == PlayerType.PLAYER_THEFORGOTTEN then
 						player = player:GetSubPlayer()
 					end
@@ -61,9 +59,12 @@ function mod:ImmortalHeartUpdate(entity, collider)
 						entity:Die()
 						entity.Velocity = Vector.Zero
 						sfx:Play(immortalSfx,1,0)
-						local extra = (data.ComplianceImmortalHeart == 0 and player:GetSoulHearts() % 2 or 0) - data.ComplianceImmortalHeart
-						player:AddSoulHearts(2 + extra)
-						data.ComplianceImmortalHeart = 2
+						player:AddSoulHearts(2)
+						local amount = 2
+						if data.ComplianceImmortalHeart == 0 and player:GetSoulHearts() % 2 ~= 0 then
+							amount = 1
+						end
+						data.ComplianceImmortalHeart = data.ComplianceImmortalHeart + amount
 					end
 				end
 				return nil
@@ -99,9 +100,10 @@ mod:AddCallback(ModCallbacks.MC_POST_PICKUP_UPDATE, mod.FullSoulHeartInit, Picku
 function mod:shouldDeHook()
 	local reqs = {
 	  not game:GetHUD():IsVisible(),
-	  game:GetSeeds():HasSeedEffect(SeedEffect.SEED_NO_HUD)
+	  game:GetSeeds():HasSeedEffect(SeedEffect.SEED_NO_HUD),
+	  game:GetLevel():GetCurses() & LevelCurse.CURSE_OF_THE_UNKNOWN ~= 0
 	}
-	return reqs[1] or reqs[2]
+	return reqs[1] or reqs[2] or reqs[3]
 end
 
 local pauseColorTimer = 0
@@ -110,6 +112,7 @@ local function renderingHearts(player,playeroffset)
 	local data = mod:GetData(player)
 	local isForgotten = player:GetPlayerType() == PlayerType.PLAYER_THEFORGOTTEN and 1 or 0
 	local transperancy = 1
+	local isTotalEven = data.ComplianceImmortalHeart % 2 == 0
 	local level = game:GetLevel()
 	if player:GetPlayerType() == PlayerType.PLAYER_JACOB2_B or player:GetEffects():HasNullEffect(NullItemID.ID_LOST_CURSE) or isForgotten == 1 then
 		transperancy = 0.3
@@ -117,8 +120,12 @@ local function renderingHearts(player,playeroffset)
 	if isForgotten == 1 then
 		player = player:GetSubPlayer()
 	end
-	if level:GetCurses() & LevelCurse.CURSE_OF_THE_UNKNOWN == 0 and data.ComplianceImmortalHeart > 0 then
-		local hearts = (CanOnlyHaveSoulHearts(player) and player:GetBoneHearts()*2 or player:GetEffectiveMaxHearts()) + player:GetSoulHearts()
+	local heartIndex = math.ceil(data.ComplianceImmortalHeart/2) - 1
+	for i=0, heartIndex do
+		local ImmortalSplash = Sprite()
+		ImmortalSplash:Load("gfx/ui/ui_remix_hearts.anm2",true)
+
+		local hearts = ((CanOnlyHaveSoulHearts(player) and player:GetBoneHearts()*2 or player:GetEffectiveMaxHearts()) + player:GetSoulHearts()) - (i * 2)
 		if hearts%2 ~= 0 then
 			data.hpOffset = playeroffset == 5 and -6 or 6
 		else
@@ -138,8 +145,13 @@ local function renderingHearts(player,playeroffset)
 		local offsetCol = (playeroffset == 1 or playeroffset == 5) and 13 or 7
 		offset.X = offset.X  - math.floor(hearts / offsetCol) * (playeroffset == 5 and (-72) or (playeroffset == 1 and 72 or 36))
 		offset.Y = offset.Y + math.floor(hearts / offsetCol) * 10
-		local anim = data.ComplianceImmortalHeart == 1 and "ImmortalHeartHalf" or "ImmortalHeartFull"
-		
+		local anim = "ImmortalHeartFull"
+		if not isTotalEven then
+			if i == 0 then
+				anim = "ImmortalHeartHalf"
+			end
+		end
+				
 		ImmortalSplash.Color = Color(1,1,1,transperancy)
 		--[[local rendering = ImmortalSplash.Color.A > 0.1 or game:GetFrameCount() < 1
 		if game:IsPaused() then
@@ -239,15 +251,14 @@ function mod:ImmortalBlock(entity, amount, flag, source, cooldown)
 	and (player:GetPlayerType() ~= PlayerType.PLAYER_THELOST and player:GetPlayerType() ~= PlayerType.PLAYER_THELOST_B
 	and player:GetPlayerType() ~= PlayerType.PLAYER_JACOB2_B and player:GetPlayerType() ~= PlayerType.PLAYER_THEFORGOTTEN) and
 	not (player:GetData().VoodooPin and player:GetData().VoodooPin.SwapedEnemy) then
-		amount = data.ComplianceImmortalHeart == 1 and 1 or (amount > 2 and 2 or amount)
-		data.ComplianceImmortalHeart = data.ComplianceImmortalHeart - amount
-		if data.ComplianceImmortalHeart == 0 then
+		if (data.ComplianceImmortalHeart % 2 ~= 0) then
 			sfx:Play(immortalBreakSfx,1,0)
 			local shatterSPR = Isaac.Spawn(EntityType.ENTITY_EFFECT, 904, 0, player.Position + Vector(0, 1), Vector.Zero, nil):ToEffect():GetSprite()
 			shatterSPR.PlaybackSpeed = 2
 		end
-		player:TakeDamage(amount,DamageFlag.DAMAGE_FAKE,source,cooldown)
-		player:AddSoulHearts(-amount)
+		data.ComplianceImmortalHeart = data.ComplianceImmortalHeart - 1
+		player:TakeDamage(1,DamageFlag.DAMAGE_FAKE,source,cooldown)
+		player:AddSoulHearts(-1)
 		if data.ComplianceImmortalHeart > 0 then
 			player:ResetDamageCooldown()
 			player:SetMinDamageCooldown(20)
@@ -263,30 +274,26 @@ end
 mod:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, mod.ImmortalBlock, EntityType.ENTITY_PLAYER)
 
 function mod:ActOfImmortal(player)
+	if not player:HasCollectible(CollectibleType.COLLECTIBLE_ACT_OF_CONTRITION) then return end
+	local data = mod:GetData(player)
+
 	if player:GetPlayerType() == PlayerType.PLAYER_THESOUL_B then
 		player = player:GetMainTwin()
 	end
-	local data = mod:GetData(player)
 	if player:GetPlayerType() == PlayerType.PLAYER_THEFORGOTTEN then
 		player = player:GetSubPlayer()
 	end
-	if not player:IsItemQueueEmpty() then
-		if player.QueuedItem.Item.ID == CollectibleType.COLLECTIBLE_ACT_OF_CONTRITION then
-			data.ActOfImmortal = true
+	
+	if player:GetCollectibleNum(CollectibleType.COLLECTIBLE_ACT_OF_CONTRITION) ~= data.ContritionCount then
+		player:AddSoulHearts(2)
+		local amount = 2
+		if data.ComplianceImmortalHeart == 0 and player:GetSoulHearts() % 2 ~= 0 then
+			amount = 1
 		end
-	elseif data.ActOfImmortal then
-		data.ComplianceImmortalHeart = 2
-		player:AddSoulHearts(2 + player:GetSoulHearts() % 2)
-		data.ActOfImmortal = nil
-	end
-	local ExtraHearts = math.ceil(player:GetSoulHearts() / 2) + player:GetBoneHearts()
-	local NumSoulHearts = player:GetSoulHearts() - (1 - player:GetSoulHearts() % 2)
-	if (player:IsBoneHeart(ExtraHearts - 1) or player:IsBlackHeart(NumSoulHearts)) and data.ComplianceImmortalHeart > 0 then
-		player:AddSoulHearts(-data.ComplianceImmortalHeart)
-		player:AddSoulHearts(data.ComplianceImmortalHeart)
-	end
-	if player:GetEffectiveMaxHearts() + player:GetSoulHearts() == player:GetHeartLimit() and data.ComplianceImmortalHeart == 1 then
-		player:AddSoulHearts(-1)
+		data.ComplianceImmortalHeart = data.ComplianceImmortalHeart + amount
+		
+		player:AddEternalHearts(-1)
+		data.ContritionCount = player:GetCollectibleNum(CollectibleType.COLLECTIBLE_ACT_OF_CONTRITION)
 	end
 end
 mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, mod.ActOfImmortal)
@@ -295,11 +302,11 @@ function mod:ImmortalHeal()
 	for i = 0, game:GetNumPlayers() - 1 do
 		local player = Isaac.GetPlayer(i)
 		local data = mod:GetData(player)
-		if data.ComplianceImmortalHeart == 1 then
+		if not (data.ComplianceImmortalHeart % 2 == 0) then
 			ImmortalEffect = Isaac.Spawn(EntityType.ENTITY_EFFECT, 903, 0, player.Position + Vector(0, 1), Vector.Zero, nil):ToEffect()
 			ImmortalEffect:GetSprite().Offset = Vector(0, -22)
 			SFXManager():Play(SoundEffect.SOUND_HOLY, 1, 0, false, 1.25)
-			data.ComplianceImmortalHeart = 2
+			data.ComplianceImmortalHeart = data.ComplianceImmortalHeart + 1
 			player:AddSoulHearts(1)
 		end
 	end
