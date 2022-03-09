@@ -299,7 +299,7 @@ function mod:HeartHandling(player)
 		for i=0, heartIndex do
 			local ExtraHearts = math.ceil(player:GetSoulHearts() / 2) + player:GetBoneHearts() - i
 			local NumSoulHearts = player:GetSoulHearts() - (1 - player:GetSoulHearts() % 2) - i * 2
-			if (player:IsBoneHeart(ExtraHearts - 1) or player:IsBlackHeart(NumSoulHearts)) and data.ComplianceImmortalHeart > 0 then
+			if (player:IsBoneHeart(ExtraHearts - 1) or player:IsBlackHeart(NumSoulHearts)) then
 				player:AddSoulHearts(-data.ComplianceImmortalHeart)
 				player:AddSoulHearts(data.ComplianceImmortalHeart)
 			end
