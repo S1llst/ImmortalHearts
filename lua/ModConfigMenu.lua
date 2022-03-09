@@ -3,6 +3,7 @@ local mod = ComplianceImmortal
 
 mod.optionNum = 1
 mod.optionChance = 20
+mod.optionContrition = 1
     local Options = {
         [1] = "Vanilla",
         [2] = "Aladar",
@@ -46,7 +47,7 @@ if ModConfigMenu then
         end,
         Default = 20,
         Minimum = 0,
-        Maximum = 50,
+        Maximum = 100,
         Display = function()
             return 'Chance to replace Eternal Heart: '..mod.optionChance..'%'
         end,
@@ -55,6 +56,34 @@ if ModConfigMenu then
         end,
         Info = "Immortal heart's rarity."
     })
+	
+	ModConfigMenu.AddSetting(ImmortalMCM, "Settings",
+	{
+		Type = ModConfigMenu.OptionType.BOOLEAN,
+		CurrentSetting = function()
+			local current = false
+			if mod.optionContrition == 1 then
+				current = true
+			end
+			return current
+		end,
+		Display = function()
+			local onOff = "Off"
+			if mod.optionContrition == 1 then
+				onOff = "On"
+			end
+			return "Act of Contrition gives Immortal Heart: " .. onOff
+		end,
+		OnChange = function(currentBool)
+			if currentBool == true then
+				mod.optionContrition = 1
+			else
+				mod.optionContrition = 2
+			end
+		end,
+		Info = "Replaces Act of Contrition's Eternal Heart with an Immortal Heart, like in Antibirth."
+	})
+
 
     if EID then
         ModConfigMenu.AddSetting(ImmortalMCM, "Settings",

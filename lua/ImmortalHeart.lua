@@ -275,6 +275,7 @@ mod:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, mod.ImmortalBlock, EntityType.E
 
 function mod:ActOfImmortal(player)
 	if not player:HasCollectible(CollectibleType.COLLECTIBLE_ACT_OF_CONTRITION) then return end
+	if mod.optionContrition ~= 1 then return end
 	local data = mod:GetData(player)
 
 	if player:GetPlayerType() == PlayerType.PLAYER_THESOUL_B then
