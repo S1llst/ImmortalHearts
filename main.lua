@@ -35,11 +35,7 @@ function onStart(_, bool)
 	for i = 0, game:GetNumPlayers() - 1 do
 		local player = Isaac.GetPlayer(i)
 		local data = mod:GetData(player)
-		if bool == false then
-			data.ComplianceImmortalHeart = 0
-			data.hpOffset = 0
-		end
-		if data.ComplianceImmortalHeart == nil then
+		if bool == false or data.ComplianceImmortalHeart == nil then
 			data.ComplianceImmortalHeart = 0
 		end
 	end
@@ -61,6 +57,7 @@ function mod:OnSave(isSaving)
 	end
 	save.SpriteStyle = mod.optionNum
 	save.AppearanceChance = mod.optionChance
+	save.IHAmount = mod.optionImmortalNum
 	save.ActOfContritionChance = mod.optionContrition
 	save.showAchievement = true
 	mod:SaveData(json.encode(save))
@@ -82,6 +79,7 @@ function mod:OnLoad(isLoading)
 		mod.optionNum = save.SpriteStyle and save.SpriteStyle or 1
 		mod.optionChance = save.AppearanceChance and save.AppearanceChance or 20
 		mod.optionContrition = save.ActOfContritionChance and save.ActOfContritionChance or 1
+		mod.optionImmortalNum = save.IHAmount and save.IHAmount or 18
 		
 		if EID then
 			if mod.optionContrition == 1 then -- Has to be here because of save data

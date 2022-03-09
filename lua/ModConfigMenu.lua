@@ -3,6 +3,7 @@ local mod = ComplianceImmortal
 
 mod.optionNum = 1
 mod.optionChance = 20
+mod.optionImmortalNum = 18
 mod.optionContrition = 1
     local Options = {
         [1] = "Vanilla",
@@ -55,6 +56,24 @@ if ModConfigMenu then
             mod.optionChance = currentNum
         end,
         Info = "Immortal heart's rarity."
+    })
+
+    ModConfigMenu.AddSetting(ImmortalMCM, "Settings",
+    {
+        Type = ModConfigMenu.OptionType.NUMBER,
+        CurrentSetting = function()
+            return mod.optionImmortalNum
+        end,
+        Default = 18,
+        Minimum = 1,
+        Maximum = 18,
+        Display = function()
+            return 'Immortal hearts amount: '..mod.optionImmortalNum..(mod.optionImmortalNum > 12 and " (Maggie's Birthright)" or "")
+        end,
+        OnChange = function(currentNum)
+            mod.optionImmortalNum = currentNum
+        end,
+        Info = "Amount of Immortal hearts player can have at the time."
     })
 	
 	ModConfigMenu.AddSetting(ImmortalMCM, "Settings",

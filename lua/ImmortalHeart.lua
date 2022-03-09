@@ -9,7 +9,6 @@ function mod:initData(player)
 	local data = mod:GetData(player)
 	if data.ComplianceImmortalHeart == nil then
 		data.ComplianceImmortalHeart = 0
-		data.hpOffset = 0
 	end
     if player:GetPlayerType() == PlayerType.PLAYER_BETHANY then
     	data.ImmortalCharge = 0
@@ -37,7 +36,7 @@ function mod:ImmortalHeartUpdate(entity, collider)
 		local data = mod:GetData(player)
 		local player = player:GetPlayerType() == PlayerType.PLAYER_THEFORGOTTEN and player:GetSubPlayer() or player
 		if player:CanPickSoulHearts() then
-			if entity.SubType == 902 then
+			if entity.SubType == 902 and data.ComplianceImmortalHeart < mod.optionImmortalNum * 2 then
 				if (player:GetPlayerType() == PlayerType.PLAYER_THELOST or player:GetPlayerType() == PlayerType.PLAYER_THELOST_B) then
 					entity:GetSprite():Play("Collect", true)
 					entity:Die()
@@ -126,20 +125,13 @@ local function renderingHearts(player,playeroffset)
 		ImmortalSplash:Load("gfx/ui/ui_remix_hearts.anm2",true)
 
 		local hearts = ((CanOnlyHaveSoulHearts(player) and player:GetBoneHearts()*2 or player:GetEffectiveMaxHearts()) + player:GetSoulHearts()) - (i * 2)
-		if hearts%2 ~= 0 then
-			data.hpOffset = playeroffset == 5 and -6 or 6
-		else
-			data.hpOffset = 0
-		end
-		if player:GetSoulHearts() == 0 then
-			data.ComplianceImmortalHeart = 0
-		end
+		local hpOffset = hearts%2 ~= 0 and (playeroffset == 5 and -6 or 6) or 0
 		local playersHeartPos = {
-			[1] = Options.HUDOffset * Vector(20, 12) + Vector(hearts*6+36+data.hpOffset, 12) + Vector(0,10) * isForgotten,
-			[2] = screenHelper.GetScreenTopRight(0) + Vector(hearts*6+data.hpOffset-123,12) + Options.HUDOffset * Vector(-20*1.2, 12) + Vector(0,20) * isForgotten,
-			[3] = screenHelper.GetScreenBottomLeft(0) + Vector(hearts*6+data.hpOffset+46,-27) + Options.HUDOffset * Vector(20*1.1, -12*0.5) + Vector(0,20) * isForgotten,
-			[4] = screenHelper.GetScreenBottomRight(0) + Vector(hearts*6+data.hpOffset-131,-27) + Options.HUDOffset * Vector(-20*0.8, -12*0.5) + Vector(0,20) * isForgotten,
-			[5] = screenHelper.GetScreenBottomRight(0) + Vector((-hearts)*6+data.hpOffset-36,-27) + Options.HUDOffset * Vector(-20*0.8, -12*0.5)
+			[1] = Options.HUDOffset * Vector(20, 12) + Vector(hearts*6+36+hpOffset, 12) + Vector(0,10) * isForgotten,
+			[2] = screenHelper.GetScreenTopRight(0) + Vector(hearts*6+hpOffset-123,12) + Options.HUDOffset * Vector(-20*1.2, 12) + Vector(0,20) * isForgotten,
+			[3] = screenHelper.GetScreenBottomLeft(0) + Vector(hearts*6+hpOffset+46,-27) + Options.HUDOffset * Vector(20*1.1, -12*0.5) + Vector(0,20) * isForgotten,
+			[4] = screenHelper.GetScreenBottomRight(0) + Vector(hearts*6+hpOffset-131,-27) + Options.HUDOffset * Vector(-20*0.8, -12*0.5) + Vector(0,20) * isForgotten,
+			[5] = screenHelper.GetScreenBottomRight(0) + Vector((-hearts)*6+hpOffset-36,-27) + Options.HUDOffset * Vector(-20*0.8, -12*0.5)
 		}
 		local offset = playersHeartPos[playeroffset]
 		local offsetCol = (playeroffset == 1 or playeroffset == 5) and 13 or 7
@@ -197,7 +189,6 @@ end
 
 function mod:onRender(shadername)
 	if shadername ~= "Immortal Hearts" then return end
-
 	if mod:shouldDeHook() then return end
 	local players = 0
 	local isJacobFirst = false
@@ -298,6 +289,27 @@ function mod:ActOfImmortal(player)
 	end
 end
 mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, mod.ActOfImmortal)
+
+function mod:HeartHandling(player)
+	local data = mod:GetData(player)
+	if data.ComplianceImmortalHeart then
+		data.ComplianceImmortalHeart = data.ComplianceImmortalHeart > mod.optionImmortalNum * 2 and mod.optionImmortalNum * 2 or data.ComplianceImmortalHeart
+		data.ComplianceImmortalHeart = data.ComplianceImmortalHeart > player:GetSoulHearts() and player:GetSoulHearts() or data.ComplianceImmortalHeart
+		local heartIndex = math.ceil(data.ComplianceImmortalHeart/2) - 1
+		for i=0, heartIndex do
+			local ExtraHearts = math.ceil(player:GetSoulHearts() / 2) + player:GetBoneHearts() - i
+			local NumSoulHearts = player:GetSoulHearts() - (1 - player:GetSoulHearts() % 2) - i * 2
+			if (player:IsBoneHeart(ExtraHearts - 1) or player:IsBlackHeart(NumSoulHearts)) and data.ComplianceImmortalHeart > 0 then
+				player:AddSoulHearts(-data.ComplianceImmortalHeart)
+				player:AddSoulHearts(data.ComplianceImmortalHeart)
+			end
+			if player:GetEffectiveMaxHearts() + player:GetSoulHearts() == player:GetHeartLimit() and data.ComplianceImmortalHeart == 1 then
+				player:AddSoulHearts(-1)
+			end
+		end
+	end
+end
+mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, mod.HeartHandling)
 
 function mod:ImmortalHeal()
 	for i = 0, game:GetNumPlayers() - 1 do
