@@ -292,6 +292,9 @@ mod:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, mod.ActOfImmortal)
 
 function mod:HeartHandling(player)
 	local data = mod:GetData(player)
+	if player:GetPlayerType() == PlayerType.PLAYER_THEFORGOTTEN then
+		player = player:GetSubPlayer()
+	end
 	if data.ComplianceImmortalHeart > 0 then
 		data.ComplianceImmortalHeart = data.ComplianceImmortalHeart > mod.optionImmortalNum * 2 and mod.optionImmortalNum * 2 or data.ComplianceImmortalHeart
 		data.ComplianceImmortalHeart = data.ComplianceImmortalHeart > player:GetSoulHearts() and player:GetSoulHearts() or data.ComplianceImmortalHeart
