@@ -10,4 +10,6 @@ Globals.rng:SetSeed(Random() + 1, 75)
 Globals.Room = nil
 Globals.Level = nil
 
+Globals.PlayerData = { }
+
 return Globals;
