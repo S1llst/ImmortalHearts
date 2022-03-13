@@ -10,7 +10,7 @@
 [b][h1]------------------------ 𝐈𝐦𝐦𝐨𝐫𝐭𝐚𝐥 𝐇𝐞𝐚𝐫𝐭𝐬 -----------------------[/h1][/b]
 [img]https://i.imgur.com/lWoyRmL.png[/img]
 [list]
-[*][img]https://i.imgur.com/anZq0RP.png[/img] Holy heart that, if not destroyed in 1 hit, [b]automatically regenerates[/b] upon completing a room in which the player received damage [img]https://i.imgur.com/1s0QtoB.png[/img][list]
+[*][img]https://i.imgur.com/anZq0RP.png[/img] Holy heart that [b]automatically regenerates[/b] upon completing a room in which the player received damage [img]https://i.imgur.com/1s0QtoB.png[/img][list]
 [*]The player may only have [b]1 Immortal Heart[/b] at a time
 [*]Invincibility frames = [b]20[/b]
 [*][u]How to collect:[/u][list]
@@ -40,6 +40,7 @@
 [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2591936266]Lifebar[/url] [img]https://i.imgur.com/3StwT2S.png[/img]
 [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2561215035]Alternative Hearts +[/url] [img]https://i.imgur.com/HxrOQzs.png[/img]
 [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2773637668]Flashy HUD + Pickups[/url] [img]https://i.imgur.com/l8nLtdX.png[/img]
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2777269929]Re-color UI[/url] [img]https://i.imgur.com/AfeqWNa.png[/img]
 [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2545179560]Beautiful Custom HUD[/url] [img]https://i.imgur.com/8XDUAVE.png[/img]
 [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2758668850]goncholito's hearts[/url] [img]https://i.imgur.com/vh6dEiP.png[/img][/list]
 [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2678755675]Beth's Heart[/url] [img]https://i.imgur.com/C2aNKdj.png[/img]
@@ -50,7 +51,7 @@
 [*][u]𝐂𝐨𝐝𝐞𝐫𝐬[/u] = [url=https://steamcommunity.com/profiles/76561198858875349]Akad[/url], [url=https://steamcommunity.com/id/anchikai]anchikai.[/url], [url=https://steamcommunity.com/id/brakedude]BrakeDude[/url], [url=https://steamcommunity.com/id/kittenchilly]kittenchilly[/url]
 [*][u]𝐀𝐫𝐭𝐢𝐬𝐭𝐬[/u] = [url=https://steamcommunity.com/profiles/76561199054232018]ALADAR[/url], [url=https://steamcommunity.com/id/Mattzilla1919]Firework[/url], [url=https://steamcommunity.com/id/gonxolito]Goncholito[/url], [url=https://steamcommunity.com/profiles/76561198813796283]Kotry[/url], [url=https://steamcommunity.com/profiles/76561199004525526/]Michael¿?[/url], [url=https://steamcommunity.com/id/funnynotename]The Demisemihemidemisemiquaver[/url]
 [*][u]𝐓𝐫𝐚𝐧𝐬𝐥𝐚𝐭𝐨𝐫𝐬[/u] = [url=https://steamcommunity.com/id/brakedude]BrakeDude[/url], [url=https://steamcommunity.com/profiles/76561198813796283]Kotry[/url]
-[*][u]𝐏𝐥𝐚𝐲𝐭𝐞𝐬𝐭𝐞𝐫𝐬[/u]= [url=https://steamcommunity.com/profiles/76561198858875349]Akad[/url],  [url=https://steamcommunity.com/id/brakedude]BrakeDude[/url], [url=https://steamcommunity.com/profiles/76561198813796283]Kotry[/url], [url=https://steamcommunity.com/profiles/76561198374458982/]Sillst[/url], [url=https://steamcommunity.com/id/funnynotename]The Demisemihemidemisemiquaver[/url]
+[*][u]𝐏𝐥𝐚𝐲𝐭𝐞𝐬𝐭𝐞𝐫𝐬[/u]= [url=https://steamcommunity.com/profiles/76561198858875349]Akad[/url],  [url=https://steamcommunity.com/id/brakedude]BrakeDude[/url], [url=https://steamcommunity.com/id/kittenchilly]kittenchilly[/url],[url=https://steamcommunity.com/profiles/76561198813796283]Kotry[/url], [url=https://steamcommunity.com/profiles/76561198374458982/]Sillst[/url], [url=https://steamcommunity.com/id/funnynotename]The Demisemihemidemisemiquaver[/url]
 [/list]
 
 [img]https://i.imgur.com/3en8OyU.png[/img]
@@ -71,7 +72,7 @@
 [img]https://i.imgur.com/jBFg02x.png[/img] [url=https://twitter.com/ComplianceMods]TBOI: Compliance Twitter[/url] [img]https://i.imgur.com/jBFg02x.png[/img]
 
 [img]https://i.imgur.com/MTKQKCX.png[/img]</description>
-    <version>1.2</version>
+    <version>1.3</version>
     <visibility>Public</visibility>
     <tag id="Lua"/>
     <tag id="Pickups"/>
